@@ -40,7 +40,6 @@ public class Main extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         try {
-
             if (event.getMessage().getContentRaw().equalsIgnoreCase("!shutdown")) {
                 event.getJDA().shutdown();
             }
