@@ -47,99 +47,19 @@ public class Main extends ListenerAdapter {
             if (event.getMessage().getContentRaw().equalsIgnoreCase("!ttt")) {
                 event.getChannel().sendMessageEmbeds(playX(0)).queue();
             }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!1")) {
-                event.getChannel().sendMessageEmbeds(playX(1)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
+            playIteration(event,"!1");
+            playIteration(event,"!2");
+            playIteration(event,"!3");
+            playIteration(event,"!4");
+            playIteration(event,"!5");
+            playIteration(event,"!6");
+            playIteration(event,"!7");
+            playIteration(event,"!8");
+            playIteration(event,"!9");
 
-            }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!2")) {
-                event.getChannel().sendMessageEmbeds(playX(2)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
-            }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!3")) {
-                event.getChannel().sendMessageEmbeds(playX(3)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
-            }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!4")) {
-                event.getChannel().sendMessageEmbeds(playX(4)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
-            }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!5")) {
-                event.getChannel().sendMessageEmbeds(playX(5)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
-            }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!6")) {
-                event.getChannel().sendMessageEmbeds(playX(6)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
-            }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!7")) {
-                event.getChannel().sendMessageEmbeds(playX(7)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
-            }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!8")) {
-                event.getChannel().sendMessageEmbeds(playX(8)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
-            }
-            if (event.getMessage().getContentRaw().equalsIgnoreCase("!9")) {
-                event.getChannel().sendMessageEmbeds(playX(9)).queue();
-                if(checkWin()) {
-                    Thread.sleep(700);
-                    event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(checkLose()){
-                        event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
-                    }
-                }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
-            }
         }catch (IllegalArgumentException | InterruptedException e){
             System.out.println("Position is not empty");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -231,27 +151,15 @@ public class Main extends ListenerAdapter {
         Random random = new Random();
         List<Integer> freeIndexes = new ArrayList<>(); //contains indexes with free positions
 
-        /*System.out.println("emptyPositions before");
-        emptyPositions.forEach(integer -> System.out.print(integer+ " "));
-        System.out.println();*/
-
         for (int i = 0; i < emptyPositions.size(); i++) {
             if(emptyPositions.get(i) == 1) freeIndexes.add(i);
         }
-
-        /*System.out.println("freeIndexes:");
-        freeIndexes.forEach(integer -> System.out.print(integer + " "));
-        System.out.println();*/
 
         int randomIndex = freeIndexes.get(random.nextInt(freeIndexes.size())); // get  random elem with a free position
         if(randomIndex == 2 || randomIndex == 5 || randomIndex == 8)
         fieldPositions.set(randomIndex,":o:\n");
         else fieldPositions.set(randomIndex,":o:");
         emptyPositions.set(randomIndex,0);
-
-       /* System.out.println("emptyPositions after");
-        emptyPositions.forEach(integer -> System.out.print(integer+ " "));
-        System.out.println();*/
 
         MessageBuilder messageBuilder = new MessageBuilder();
         for(String s: fieldPositions){
@@ -300,6 +208,11 @@ public class Main extends ListenerAdapter {
                 || (fieldPositions.get(2).equals(":o:\n") && fieldPositions.get(4).equals(":o:") && fieldPositions.get(6).equals(":o:"));
     }
 
+    public static boolean checkDraw(){
+        List<Integer> nullList = Arrays.asList(0,0,0,0,0,0,0,0,0);
+        return emptyPositions.equals(nullList);
+    }
+
     public static MessageEmbed getWinMessage(){
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle("You Won!!!");
@@ -314,5 +227,26 @@ public class Main extends ListenerAdapter {
         embedBuilder.setDescription(":-1: :poop: :-1:");
         embedBuilder.setFooter("Noob!");
         return embedBuilder.build();
+    }
+
+    public static MessageEmbed getDrawMessage(){
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle("Draw");
+        embedBuilder.setDescription(":clown:");
+        embedBuilder.setFooter("try again...");
+        return embedBuilder.build();
+    }
+
+    public static void playIteration(@NotNull MessageReceivedEvent event, String pos) throws InterruptedException {
+        int move = Integer.parseInt(pos.substring(1));
+        if (event.getMessage().getContentRaw().equalsIgnoreCase(pos)) {
+            event.getChannel().sendMessageEmbeds(playX(move)).queue();
+            if(checkDraw()) event.getChannel().sendMessageEmbeds(getDrawMessage()).queue();
+            if(checkWin()) {
+                Thread.sleep(700);
+                event.getChannel().sendMessageEmbeds(playO()).queue();
+                if(checkLose())event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
+            }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
+        }
     }
 }
