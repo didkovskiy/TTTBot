@@ -52,7 +52,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -63,7 +63,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -73,7 +73,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -83,7 +83,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -93,7 +93,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -103,7 +103,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -113,7 +113,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -123,7 +123,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -133,7 +133,7 @@ public class Main extends ListenerAdapter {
                 if(checkWin()) {
                     Thread.sleep(700);
                     event.getChannel().sendMessageEmbeds(playO()).queue();
-                    if(!checkLose()){
+                    if(checkLose()){
                         event.getChannel().sendMessageEmbeds(getLoseMessage()).queue();
                     }
                 }else event.getChannel().sendMessageEmbeds(getWinMessage()).queue();
@@ -290,14 +290,14 @@ public class Main extends ListenerAdapter {
     }
 
     public static boolean checkLose(){
-        return (!fieldPositions.get(0).equals(":o:") || !fieldPositions.get(1).equals(":o:") || !fieldPositions.get(2).equals(":o:\n"))
-                && (!fieldPositions.get(3).equals(":o:") || !fieldPositions.get(4).equals(":o:") || !fieldPositions.get(5).equals(":o:\n"))
-                && (!fieldPositions.get(6).equals(":o:") || !fieldPositions.get(7).equals(":o:") || !fieldPositions.get(8).equals(":o:\n"))
-                && (!fieldPositions.get(0).equals(":o:") || !fieldPositions.get(3).equals(":o:") || !fieldPositions.get(6).equals(":o:"))
-                && (!fieldPositions.get(1).equals(":o:") || !fieldPositions.get(4).equals(":o:") || !fieldPositions.get(7).equals(":o:"))
-                && (!fieldPositions.get(2).equals(":o:\n") || !fieldPositions.get(5).equals(":o:\n") || !fieldPositions.get(8).equals(":o:\n"))
-                && (!fieldPositions.get(0).equals(":o:") || !fieldPositions.get(4).equals(":o:") || !fieldPositions.get(8).equals(":o:\n"))
-                && (!fieldPositions.get(2).equals(":o:\n") || !fieldPositions.get(4).equals(":o:") || !fieldPositions.get(6).equals(":o:"));
+        return (fieldPositions.get(0).equals(":o:") && fieldPositions.get(1).equals(":o:") && fieldPositions.get(2).equals(":o:\n"))
+                || (fieldPositions.get(3).equals(":o:") && fieldPositions.get(4).equals(":o:") && fieldPositions.get(5).equals(":o:\n"))
+                || (fieldPositions.get(6).equals(":o:") && fieldPositions.get(7).equals(":o:") && fieldPositions.get(8).equals(":o:\n"))
+                || (fieldPositions.get(0).equals(":o:") && fieldPositions.get(3).equals(":o:") && fieldPositions.get(6).equals(":o:"))
+                || (fieldPositions.get(1).equals(":o:") && fieldPositions.get(4).equals(":o:") && fieldPositions.get(7).equals(":o:"))
+                || (fieldPositions.get(2).equals(":o:\n") && fieldPositions.get(5).equals(":o:\n") && fieldPositions.get(8).equals(":o:\n"))
+                || (fieldPositions.get(0).equals(":o:") && fieldPositions.get(4).equals(":o:") && fieldPositions.get(8).equals(":o:\n"))
+                || (fieldPositions.get(2).equals(":o:\n") && fieldPositions.get(4).equals(":o:") && fieldPositions.get(6).equals(":o:"));
     }
 
     public static MessageEmbed getWinMessage(){
