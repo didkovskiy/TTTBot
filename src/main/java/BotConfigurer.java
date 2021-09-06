@@ -8,7 +8,7 @@ import javax.security.auth.login.LoginException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-public class Main {
+public class BotConfigurer {
     public static void main(String[] args) {
         JDABuilder builder = JDABuilder.createDefault("ODY4MTIxNDQxNDc0ODQ2NzYx.YPrDGA._ouf1vlczbbM49AnKCXMOjfoMac");
         configure(builder);
