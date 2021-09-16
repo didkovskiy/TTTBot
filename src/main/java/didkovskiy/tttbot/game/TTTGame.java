@@ -1,4 +1,4 @@
-package didkovskiy.tttbot;
+package didkovskiy.tttbot.game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;

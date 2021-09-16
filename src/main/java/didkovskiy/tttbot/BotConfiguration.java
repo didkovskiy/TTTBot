@@ -1,4 +1,7 @@
-import didkovskiy.tttbot.TTTBot;
+package didkovskiy.tttbot;
+
+import didkovskiy.tttbot.dao.PlayerDAO;
+import didkovskiy.tttbot.game.TTTBot;
 import didkovskiy.tttbot.listeners.HelpListener;
 import didkovskiy.tttbot.listeners.RatingListener;
 import didkovskiy.tttbot.listeners.ShutdownListener;
@@ -11,8 +14,12 @@ import org.apache.log4j.BasicConfigurator;
 import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 public class BotConfiguration {
 
@@ -23,10 +30,21 @@ public class BotConfiguration {
     }
 
     public static void configure(JDABuilder builder) {
-        builder.addEventListeners(new TTTBot());
+        //configuring jdbc;
+        Properties prop = getAllProperties();
+        JDBCUtil jdbcUtil = new JDBCUtil(
+                prop.getProperty("datasource.driver-class-name"),
+                prop.getProperty("datasource.url"),
+                prop.getProperty("datasource.username"),
+                prop.getProperty("datasource.password"));
+        PlayerDAO playerDAO = new PlayerDAO(jdbcUtil);
+
+        //configuring all event listeners;
+        builder.addEventListeners(new TTTBot(playerDAO));
         builder.addEventListeners(new HelpListener(new HelpMsgService()));
-        builder.addEventListeners(new ShutdownListener(new ShutdownMsgService()));
-        builder.addEventListeners(new RatingListener(new RatingMsgService()));
+        builder.addEventListeners(new ShutdownListener(new ShutdownMsgService(), playerDAO));
+        builder.addEventListeners(new RatingListener(new RatingMsgService(playerDAO)));
+
         BasicConfigurator.configure();
         String activity = charsetConvert("в крестики-нолики");
         builder.setActivity(Activity.playing(activity));
@@ -36,6 +54,16 @@ public class BotConfiguration {
         } catch (LoginException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static Properties getAllProperties(){
+        Properties prop = new Properties();
+        try (InputStream input = new FileInputStream("src/main/resources/db.properties")) {
+            prop.load(input);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return prop;
     }
 
     @NotNull

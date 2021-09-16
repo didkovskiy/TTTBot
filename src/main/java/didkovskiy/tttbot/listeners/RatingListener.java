@@ -15,6 +15,8 @@ public class RatingListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        messagingService.getMessage();
+        if (event.getMessage().getContentRaw().equalsIgnoreCase("!rating")) {
+            event.getChannel().sendMessageEmbeds(messagingService.getMessage()).queue();
+        }
     }
 }
