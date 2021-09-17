@@ -7,15 +7,19 @@ players on the server.
 
 ## Start playing
 You can start with `!help` command right in the chat:
+
 ![help](https://github.com/didkovskiy/TTTBot/blob/master/doc/helpCommand.PNG)
 
 Then everything is simple:
+
 ![moves](https://github.com/didkovskiy/TTTBot/blob/master/doc/moves.PNG)
 
 Depending on the result, you will receive the following message:
+
 ![result](https://github.com/didkovskiy/TTTBot/blob/master/doc/result.PNG)
 
 Type `!rating` to see list of results of all players on the server.
+
 ![rating](https://github.com/didkovskiy/TTTBot/blob/master/doc/rating.PNG)
 
 ## Technologies used
