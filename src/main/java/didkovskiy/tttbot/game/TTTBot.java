@@ -4,9 +4,7 @@ import didkovskiy.tttbot.dao.PlayerDAO;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
+import static didkovskiy.tttbot.BotConfiguration.charsetConvert;
 
 public class TTTBot extends ListenerAdapter {
 
@@ -15,12 +13,12 @@ public class TTTBot extends ListenerAdapter {
 
     public TTTBot(PlayerDAO playerDAO) {
         this.playerDAO = playerDAO;
-        game = TTTGame.initGame();
+        game = new TTTGame(playerDAO);
     }
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        String eventAuthor = charsetConvert(event.getAuthor().getName());
+        String eventAuthor = charsetConvert(event.getAuthor().getName(), false);
         try {
             if (event.getMessage().getContentRaw().equalsIgnoreCase("!ttt")) {
                 if(!playerDAO.isPlayerExists(eventAuthor))
@@ -43,16 +41,6 @@ public class TTTBot extends ListenerAdapter {
             System.out.println("Position is not empty");
             System.out.println(e.getMessage());
         }
-    }
-
-    private String charsetConvert(@NotNull String s) {
-        String result = "";
-        try {
-            result = new String(s.getBytes(StandardCharsets.UTF_8), "windows-1251");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
 }

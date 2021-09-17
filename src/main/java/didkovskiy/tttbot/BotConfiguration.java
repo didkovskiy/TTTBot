@@ -46,7 +46,7 @@ public class BotConfiguration {
         builder.addEventListeners(new RatingListener(new RatingMsgService(playerDAO)));
 
         BasicConfigurator.configure();
-        String activity = charsetConvert("в крестики-нолики");
+        String activity = charsetConvert("в крестики-нолики", true);
         builder.setActivity(Activity.playing(activity));
 
         try {
@@ -56,7 +56,7 @@ public class BotConfiguration {
         }
     }
 
-    public static Properties getAllProperties(){
+    public static Properties getAllProperties() {
         Properties prop = new Properties();
         try (InputStream input = new FileInputStream("src/main/resources/db.properties")) {
             prop.load(input);
@@ -67,10 +67,12 @@ public class BotConfiguration {
     }
 
     @NotNull
-    public static String charsetConvert(@NotNull String s) {
+    public static String charsetConvert(@NotNull String s, boolean utf8) {
         String result = "";
         try {
-            result = new String(s.getBytes("windows-1251"), StandardCharsets.UTF_8);
+            if (utf8)
+                result = new String(s.getBytes("windows-1251"), StandardCharsets.UTF_8);
+            else result = new String(s.getBytes(StandardCharsets.UTF_8), "windows-1251");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

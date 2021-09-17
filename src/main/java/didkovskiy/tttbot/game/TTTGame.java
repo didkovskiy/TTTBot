@@ -1,5 +1,6 @@
 package didkovskiy.tttbot.game;
 
+import didkovskiy.tttbot.dao.PlayerDAO;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static didkovskiy.tttbot.BotConfiguration.charsetConvert;
+
 public class TTTGame {
     private static List<String> fieldPositions; //contains game positions {:red_square:, :o:(:o:\n), :x:(:x:\n)}
     private static List<Integer> freePositions; //contains 1 in free pos and 0 in not free
@@ -21,16 +24,15 @@ public class TTTGame {
 
     private enum GameStatus {WIN, LOSE, DRAW}
 
-    private TTTGame() {
+    private final PlayerDAO playerDAO;
+
+    TTTGame(PlayerDAO playerDAO) {
+        this.playerDAO = playerDAO;
         fieldPositions = generateEmptyGameField();
         freePositions = generateFreePositions();
     }
 
-    public static TTTGame initGame() {
-        return new TTTGame();
-    }
-
-    //method for user to play X
+    //method for player to play X
     public MessageEmbed playX(int move) {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         switch (move) {
@@ -77,6 +79,7 @@ public class TTTGame {
         Random random = new Random();
         List<Integer> freeIndexes = new ArrayList<>(); //contains indexes with free positions
 
+        //fill the list with available positions for bot to play
         for (int i = 0; i < freePositions.size(); i++) {
             if (freePositions.get(i) == 1) freeIndexes.add(i);
         }
@@ -125,7 +128,7 @@ public class TTTGame {
         return freePositions.equals(nullList);
     }
 
-    private MessageEmbed getMessage(GameStatus status) {
+    private MessageEmbed getFinalMessage(GameStatus status) {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         switch (status) {
             case WIN -> {
@@ -133,14 +136,14 @@ public class TTTGame {
                 embedBuilder.setDescription(":clap: :clap: :clap: \n");
                 embedBuilder.appendDescription("+10 points :point_up:");
                 embedBuilder.setFooter("Congratulations!");
-                embedBuilder.setColor(new Color(178, 138, 13));
+                embedBuilder.setColor(new Color(66, 222, 16));
             }
             case LOSE -> {
                 embedBuilder.setTitle("You Lose!!!");
                 embedBuilder.setDescription(":-1: :poop: :-1: \n");
                 embedBuilder.appendDescription("-10 points :point_down:");
                 embedBuilder.setFooter("Noob!");
-                embedBuilder.setColor(new Color(38, 81, 22));
+                embedBuilder.setColor(new Color(72, 29, 20));
             }
             case DRAW -> {
                 embedBuilder.setTitle("Draw");
@@ -154,6 +157,7 @@ public class TTTGame {
     }
 
     public void playIteration(@NotNull MessageReceivedEvent event, String pos) throws InterruptedException {
+        String eventAuthor = charsetConvert(event.getAuthor().getName(), false);
         int move = Integer.parseInt(pos.substring(1));
         if (event.getMessage().getContentRaw().equalsIgnoreCase(pos)) {
             event.getChannel().sendMessageEmbeds(playX(move)).queue();
@@ -161,15 +165,19 @@ public class TTTGame {
             if (!checkWin()) {
                 TimeUnit.MILLISECONDS.sleep(700);
                 if (checkDraw())
-                    event.getChannel().sendMessageEmbeds(getMessage(GameStatus.DRAW)).queue();
+                    event.getChannel().sendMessageEmbeds(getFinalMessage(GameStatus.DRAW)).queue();
                 else event.getChannel().sendMessageEmbeds(playO()).queue();
                 logger.info("O moves");
                 if (checkLose()) {
-                    event.getChannel().sendMessageEmbeds(getMessage(GameStatus.LOSE)).queue();
+                    event.getChannel().sendMessageEmbeds(getFinalMessage(GameStatus.LOSE)).queue();
+                    playerDAO.removePointsFromAPlayer(eventAuthor);
                     fieldPositions = generateEmptyGameField();
                     freePositions = generateFreePositions();
                 }
-            } else event.getChannel().sendMessageEmbeds(getMessage(GameStatus.WIN)).queue();
+            } else {
+                event.getChannel().sendMessageEmbeds(getFinalMessage(GameStatus.WIN)).queue();
+                playerDAO.addPointsToThePlayer(eventAuthor);
+            }
         }
     }
 

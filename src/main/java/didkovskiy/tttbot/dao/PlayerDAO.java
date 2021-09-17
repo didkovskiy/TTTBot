@@ -15,9 +15,9 @@ public class PlayerDAO {
 
     public Map<String, Integer> getRatingMap() {
         Map<String, Integer> ratingMap = new HashMap<>();
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM player");
+        String getAllRatingRecordsSQL = "SELECT * FROM player";
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(getAllRatingRecordsSQL);
             while (rs.next()) {
                 ratingMap.put(rs.getString("nickname"), rs.getInt("points"));
             }
@@ -28,8 +28,41 @@ public class PlayerDAO {
     }
 
     public void saveNewPlayer(String nickname) {
-        try {
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO player(nickname) VALUES (?)");
+        String saveNewPlayerSQL = "INSERT INTO player(nickname) VALUES (?)";
+        try (PreparedStatement stmt = connection.prepareStatement(saveNewPlayerSQL)) {
+            stmt.setString(1, nickname);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isPlayerExists(String nickname) {
+        boolean res = false;
+        String findPlayerByNicknameSQL = "SELECT * FROM player WHERE nickname = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(findPlayerByNicknameSQL)) {
+            stmt.setString(1, nickname);
+            ResultSet rs = stmt.executeQuery();
+            res = rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public void addPointsToThePlayer(String nickname) {
+        String addPointsToThePlayerSQL = "UPDATE player SET points = points + 10 WHERE nickname = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(addPointsToThePlayerSQL)) {
+            stmt.setString(1, nickname);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removePointsFromAPlayer(String nickname) {
+        String removePointsFromAPlayer = "UPDATE player SET points = points - 10 WHERE nickname = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(removePointsFromAPlayer)) {
             stmt.setString(1, nickname);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -43,18 +76,5 @@ public class PlayerDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean isPlayerExists(String nickname) {
-        boolean res = false;
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM player WHERE nickname = ?");
-            stmt.setString(1, nickname);
-            ResultSet rs = stmt.executeQuery();
-            res = rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
     }
 }
