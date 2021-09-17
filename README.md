@@ -14,7 +14,7 @@ Then everything is simple:
 
 <img alt="help" height="180" src="https://github.com/didkovskiy/TTTBot/blob/master/doc/moves.PNG" width=auto/>
 
-Depending on the result, you will receive the following message:
+Depending on the result, you will get the following message:
 
 <img alt="help" height="80" src="https://github.com/didkovskiy/TTTBot/blob/master/doc/result.PNG" width=auto/>
 
@@ -43,3 +43,6 @@ All you need is bot __token__. You need to configure it in:
 ```
 JDABuilder builder = JDABuilder.createDefault(System.getenv("TOKEN"));
 ```
+
+## Issues 
+The code needs optimization and fixes in some places that was commented.
