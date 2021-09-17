@@ -24,6 +24,7 @@ Type `!rating` to see list of results of all players on the server.
 
 ## Technologies used
 
+- JDK 16.0.1
 - [JDA](https://github.com/DV8FromTheWorld/JDA) 4.3.0.
 - [slf4j log4j-12](https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12) 1.7.31
 - [MySQL Connector/J](https://mvnrepository.com/artifact/mysql/mysql-connector-java) 5.1.13
